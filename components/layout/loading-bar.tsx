@@ -39,12 +39,12 @@ function LoadingBarContent() {
   if (!loading) return null;
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[10000] h-0.5 overflow-hidden bg-zinc-100/20">
-      <div className="h-full w-full bg-primary origin-left animate-[loading-bar_2s_infinite_linear]" />
+    <div className="fixed top-0 left-0 right-0 z-[10000] h-1 overflow-hidden bg-primary/10">
+      <div className="h-full w-full bg-primary origin-left animate-[loading-bar_1.5s_infinite_ease-in-out] shadow-[0_0_10px_rgba(var(--primary),0.5)]" />
       <style jsx>{`
         @keyframes loading-bar {
           0% { transform: translateX(-100%); }
-          50% { transform: translateX(-30%); }
+          50% { transform: translateX(-15%); }
           100% { transform: translateX(0%); }
         }
       `}</style>
