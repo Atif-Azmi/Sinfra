@@ -77,12 +77,20 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  const user = session?.user ?? null;
-
   const { pathname } = request.nextUrl;
+  const isCriticalPath = 
+    pathname.startsWith("/superadmin") || 
+    pathname.startsWith("/api/auth") ||
+    pathname.startsWith("/settings");
+
+  let user = null;
+  if (isCriticalPath) {
+    const { data: { user: verifiedUser } } = await supabase.auth.getUser();
+    user = verifiedUser;
+  } else {
+    const { data: { session } } = await supabase.auth.getSession();
+    user = session?.user ?? null;
+  }
 
   if (!user && pathname !== "/login") {
     const url = request.nextUrl.clone();
