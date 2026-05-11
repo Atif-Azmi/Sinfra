@@ -168,24 +168,8 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  if (user) {
-    const moduleKey = getModuleKeyForPath(pathname);
-
-    if (moduleKey && roleLower !== "superadmin") {
-      const { data: modRow } = await supabase
-        .from("business_modules")
-        .select("enabled")
-        .eq("module_key", moduleKey)
-        .maybeSingle();
-
-      if (modRow && modRow.enabled === false) {
-        const url = request.nextUrl.clone();
-        url.pathname = roleLower === "advisor" ? "/advisor" : "/dashboard";
-        url.searchParams.set("forbidden", "module");
-        return NextResponse.redirect(url);
-      }
-    }
-  }
+  // Module check moved to page/layout level for better performance and to allow loading states to show.
+  // The sidebar already filters these links, so this check in middleware was redundant and slow.
 
   if (user && pathname === "/login") {
     if (roleLower === "superadmin") {
